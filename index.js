@@ -39,8 +39,18 @@ async function run() {
 
     app.get("/task/:email", async (req, res) => {
       const email = req.params.email;
+      console.log(req.params);
 
       const query = { user: email, status: "todo" };
+      const result = await taskCollections.find(query).toArray();
+
+      res.send(result);
+    });
+
+    app.get("/taskForWarning/:email", async (req, res) => {
+      const email = req.params.email;
+
+      const query = { user: email };
       const result = await taskCollections.find(query).toArray();
 
       res.send(result);
