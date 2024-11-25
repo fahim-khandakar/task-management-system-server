@@ -39,7 +39,6 @@ async function run() {
 
     app.get("/task/:email", async (req, res) => {
       const email = req.params.email;
-      console.log(req.params);
 
       const query = { user: email, status: "todo" };
       const result = await taskCollections.find(query).toArray();
@@ -129,6 +128,30 @@ async function run() {
       const task = {
         $set: {
           status: "todo",
+        },
+      };
+      const result = await taskCollections.updateOne(query, task);
+      res.send(result);
+    });
+
+    // archived todo
+
+    app.get("/archivedTodo/:email", async (req, res) => {
+      const email = req.params.email;
+
+      const query = { user: email, status: "archived" };
+      const result = await taskCollections.find(query).toArray();
+      console.log("result", result);
+      res.send(result);
+    });
+
+    app.put("/toArchived/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      const task = {
+        $set: {
+          status: "archived",
         },
       };
       const result = await taskCollections.updateOne(query, task);
