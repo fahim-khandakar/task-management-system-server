@@ -33,6 +33,11 @@ async function run() {
     // add task functionality
     app.post("/addTask", async (req, res) => {
       const task = req.body;
+
+      // Add timestamps
+      task.createdAt = new Date();
+      task.updatedAt = new Date();
+
       const result = await taskCollections.insertOne(task);
       res.send(result);
     });
@@ -65,6 +70,7 @@ async function run() {
           description: updatedTask.description,
           user: updatedTask.user,
           priority: updatedTask.priority,
+          updatedAt: new Date(),
         },
       };
       const result = await taskCollections.updateOne(query, task);
